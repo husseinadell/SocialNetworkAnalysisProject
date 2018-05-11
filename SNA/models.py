@@ -49,3 +49,9 @@ class Like(models.Model):
 	
 	def __str__(self):
 		return self.User
+class friendShip(models.Model):
+	user1 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="friend1")
+	user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="friend2")
+class groupMembers(models.Model):
+	group = models.ForeignKey(Group,on_delete=models.CASCADE,related_name="group")
+	user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="member")

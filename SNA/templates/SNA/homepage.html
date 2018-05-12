@@ -7,7 +7,17 @@
 
 	<div><h3>date</h3><p>{{p.body}}</p><div>likes</div><div>commments</div></div>
 {% endfor%}
-	<div><h2>friends of friends</h2><ul><li>friendname<li><ul></div>
+
+
+	<div><ul>
+{%for friendship in suggestionList %}
+
+
+<li><a href="../addfriend/{{user.Email}}/{{friendship.user1.Email}}"><button>addFriend</button></a><h2>{{friendship.user1.user_name}}</h2><li>
+<li><a href="../addfriend/{{user.Email}}/{{friendship.user2.Email}}"><button>addFriend</button></a><h2>{{friendship.user2.user_name}}</h2><li>
+
+{%endfor%}
+<ul></div>
 
 	<div><h2>recomended groups</h2><ul><li>groupname<li><ul></div>
 

@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
+from django.shortcuts import redirect
+
 from django.template import loader
 from .models import User
 from .models import Post
+from .models import friendShip
 
 # Create your views here.
 def index(request):
@@ -59,22 +63,63 @@ def home(request):
 		password = request.POST.get("password")
 		user = User.objects.get(Email = email)
 		list = Post.objects.order_by('scope')
+		suggestionList = friendShip.objects.exclude(user1 = user).exclude(user2 = user)
 		if user:
 			if user.password != password:
 				template = loader.get_template('SNA/login.html')
 				return HttpResponse(template.render({},request))
 		else :
 			template = loader.get_template('SNA/login.html')
-			return HttpResponse(template.render({},request))  
+			return HttpResponse(template.render({},request)) 
+	
+		
 	else :
 		template = loader.get_template('SNA/login.html')
 		return HttpResponse(template.render({},request)) 
-	return HttpResponse(template.render({'user':user,'list':list},request))
+	return HttpResponse(template.render({'user':user,'list':list,'suggestionList':suggestionList},request))
+
+def home2(request,email):
+	#process and redirect to homepage
+	template = loader.get_template('SNA/homepage.html')
+		
+	if  request.method == "GET" :
+		user = User.objects.get(Email = email)
+		list = Post.objects.order_by('scope')
+		suggestionList = friendShip.objects.exclude(user1 = user).exclude(user2 = user)
+	else :
+		template = loader.get_template('SNA/login.html')
+		return HttpResponse(template.render({},request)) 
+	return HttpResponse(template.render({'user':user,'list':list,'suggestionList':suggestionList},request))
+
 
 def profile(request):
 	#load signup page
 	template = loader.get_template('SNA/profile.html')
 	return HttpResponse(template.render({},request))
+
+def addFriendCaller(request,email1,email2):
+	template = loader.get_template('SNA/homepage.html')
+	friend1 = User.objects.get(Email = email1)
+	friend2 = User.objects.get(Email = email2)
+	list = Post.objects.order_by('scope')
+	suggestionList = friendShip.objects.exclude(user1 = friend1).exclude(user2 = friend1)
+		
+	return HttpResponse(template.render({
+'user':friend1,'list':list,'suggestionList':suggestionList},request))
+
+def addFriend(request,email1,email2):
+	if request.method == "GET":
+		template = loader.get_template('SNA/homepage.html')
+		friend1 = User.objects.get(Email = email1)
+		friend2 = User.objects.get(Email = email2)
+		newFriendShip = friendShip(user1=friend1,user2=friend2)
+		newFriendShip.save()
+		list = Post.objects.order_by('scope')
+		suggestionList = friendShip.objects.exclude(user1 = friend1).exclude(user2 = friend1)
+		return redirect ('../../home/'+email1)
+		
+	else :
+		return HttpResponse(request)
 
 def empty(request):
 	return HttpResponse('empty path   )~: ')

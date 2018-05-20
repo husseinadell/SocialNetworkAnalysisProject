@@ -1,0 +1,19 @@
+<div>
+<p>{{post.body}}</p>
+likes:{%for like in likeList%}
+	<div>{{like.user}}</div>
+{%endfor%}
+</br>
+
+comments:{%for comment in commentList%}
+	<div>{{comment.body}}</div>
+	<br>
+	<div>{{comment.user}}</div>
+	<br>
+	<a href='../delete_comment/{{comment.id}}/{{post.id}}'>remove comment</a>
+{%endfor%}
+<a href='../create_like/{{post.id}}/{{post.user.id}}'><button >like</button></a>
+<a href='../delete_like/{{post.id}}/{{post.user.id}}'><button >unlike</button></a>
+<a href='../create_comment/{{post.id}}/{{post.user.id}}'><button >add comment</button></a>
+</div>
+

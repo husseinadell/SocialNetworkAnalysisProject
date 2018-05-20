@@ -21,19 +21,21 @@ class Group (models.Model):
 	def __str__(self):
 		return self.name
 
-class Post (models.Model):
-	Choices = (('T','timeline'),('G','group'))
+class Post(models.Model):
+	TIMELINE = 'T'
+	GROUP= 'G'
+	Choices = ((TIMELINE,'timeline'),(GROUP,'group'))
 	body = models.TextField()
 	user = models.ForeignKey(User, on_delete = models.CASCADE,related_name = "Post_publisher")
 	scope = models.CharField(max_length = 1,choices = Choices,default = 'T')
-	group = models.ForeignKey(Group, on_delete = models.CASCADE,related_name = "post_group")
+	group = models.ForeignKey(Group, on_delete = models.CASCADE,related_name = "post_group",null=True)
 
 	def __str__(self):
 		return self.body
 
 class Comment(models.Model):
-	post = models.ForeignKey(Post,on_delete = models.CASCADE)
-	user = models.ForeignKey(User,on_delete = models.CASCADE,related_name = "comment_owner")
+	post = models.ForeignKey(Post,on_delete = models.CASCADE,null=True)
+	user = models.ForeignKey(User,on_delete = models.CASCADE,null=True,related_name = "comment_owner")
 	body = models.TextField()
 
 	def __str__(self):
@@ -41,17 +43,24 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-	Choices = (('P','post'),('C','comment'))
+	POST = 'P'
+	COMMENT = 'C'
+	Choices = ((POST,'post'),(COMMENT,'comment'))
 	user = models.ForeignKey(User,on_delete = models.CASCADE,related_name = "like_owner")
-	post = models.ForeignKey(Post,on_delete = models.CASCADE,related_name = "liked_post")
-	comment = models.ForeignKey(Comment,on_delete = models.CASCADE,related_name = "liked_comment")
-	scope = models.CharField(max_length = 1,choices = Choices,default = 'P')
+	post = models.ForeignKey(Post,on_delete = models.CASCADE,related_name = "liked_post",null=True)
+	comment = models.ForeignKey(Comment,on_delete = models.CASCADE,related_name = "liked_comment",null=True)
+	scope = models.CharField(max_length = 1,choices = Choices,default = POST,null=True)
 	
-	def __str__(self):
-		return self.User
+	
+
+
 class friendShip(models.Model):
 	user1 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="friend1")
 	user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="friend2")
+	def __str__(self):
+		return self.user1.user_name +" " + self.user2.user_name
+
+
 class groupMembers(models.Model):
 	group = models.ForeignKey(Group,on_delete=models.CASCADE,related_name="group")
 	user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="member")

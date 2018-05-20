@@ -1,24 +1,38 @@
 <h1>Home page </h1><a href = "../profile/"><button >visit your profile</button></a>
-
+<a href='../login'><button>log out</button></a>
 <h2>{{ user.user_name }}</h2>
+<a href='../create_post/{{user.id}}'><button>create post</button></a>
 <h2>posts</h2>
 {% for p in list %}
 	
 
-	<div><h3>date</h3><p>{{p.body}}</p><div>likes</div><div>commments</div></div>
+	<div>
+<h3>date</h3>
+<a href='../post/{{p.id}}'>visit</a>
+<p>{{p.body}}</p>
+</div>
 {% endfor%}
 
 
 	<div><ul>
-{%for friendship in suggestionList %}
+{%for friendship in suggestionList1 %}
 
 
-<li><a href="../addfriend/{{user.Email}}/{{friendship.user1.Email}}"><button>addFriend</button></a><h2>{{friendship.user1.user_name}}</h2><li>
-<li><a href="../addfriend/{{user.Email}}/{{friendship.user2.Email}}"><button>addFriend</button></a><h2>{{friendship.user2.user_name}}</h2><li>
+<li><h2>{{friendship.user_name}}</h2><a href="../visitprofile/{{friendship.id}}/{{user.id}}"><button>visit Friend</button></a><li>
 
 {%endfor%}
 <ul></div>
 
-	<div><h2>recomended groups</h2><ul><li>groupname<li><ul></div>
+	<div><h2>suggested friends</h2><ul>
+<div><ul>
+{%for friendship in suggestionList2 %}
+
+
+<li><h2>{{friendship.user_name}}</h2><a href="../visitprofile/{{friendship.id}}/{{user.id}}"><button>visit Friend</button></a>
+<a href="../addfriend/{{user.Email}}/{{friendship.Email}}"><button>add Friend</button></a><li>
+
+{%endfor%}
+<ul></div>
+
 
 

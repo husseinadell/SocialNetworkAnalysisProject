@@ -1,0 +1,26 @@
+<h1> {{user.user_name}}</h1>
+
+<h2>posts</h2>
+{% for p in post_list %}
+	
+
+	<div>
+<a href='../post/{{p.id}}'>visit</a>
+<p>{{p.body}}</p>
+</div>
+{% endfor%}
+
+
+	
+
+
+<h2>friends</h2><div><ul>
+{%for friendship in my_friends %}
+
+
+<li><h2>{{friendship.user_name}}</h2><li><br>
+
+{%endfor%}
+<ul></div>
+<a href="../../home/{{main_user}}"><button>home</button></a>
+
